@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bridging History - Cultural Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+    
+    :root {
+      --primary: #6b4423;
+      --secondary: #d97706;
+      --accent: #800000;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .brown-nav {
+      background-color: var(--primary);
+      transition: all 0.3s ease;
+    }
+    
+    .brown-nav.scrolled {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .brown-nav a {
+      color: #f5deb3;
+      position: relative;
+    }
+    
+    .brown-nav a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: white;
+      transition: width 0.3s ease;
+    }
+    
+    .brown-nav a:hover:after {
+      width: 100%;
+    }
+    
+    /* Game Card Hover Effect */
+    .game-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.2);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    .game-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .game-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.5s ease;
+    }
+    
+    .game-card:hover .game-image {
+      transform: scale(1.05);
+    }
+    
+    .game-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    
+    .game-card:hover .game-overlay {
+      opacity: 1;
+    }
+    
+    .play-button {
+      background-color: var(--secondary);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.25rem;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+    }
+    
+    .game-card:hover .play-button {
+      transform: translateY(0);
+    }
+    
+    .play-button:hover {
+      background-color: #e68a1a;
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6);
+    }
+
+    /* Background image styles */
+    .section-bg {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+    
+    .section-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+    }
+    
+    .section-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Video container */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 1rem;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Sticky Header -->
+  <header class="brown-nav shadow-md py-4 px-6 sticky top-0 z-50" id="main-header">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-amber-100">Bridging History</h1>
+      <nav class="space-x-6 hidden md:flex">
+        <a href="#home" class="font-medium hover:text-white transition">Home</a>
+        <a href="#about" class="font-medium hover:text-white transition">About</a>
+        <a href="#location" class="font-medium hover:text-white transition">Location</a>
+        <a href="#game" class="font-medium hover:text-white transition">Game</a>
+      </nav>
+      <button class="md:hidden text-amber-100 text-2xl" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div class="md:hidden hidden bg-[#5a381c] w-full mt-4 py-4 px-6 rounded-lg" id="mobile-menu">
+      <a href="#home" class="block py-2 hover:text-white transition">Home</a>
+      <a href="#about" class="block py-2 hover:text-white transition">About</a>
+      <a href="#location" class="block py-2 hover:text-white transition">Location</a>
+      <a href="#game" class="block py-2 hover:text-white transition">Game</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section with Background -->
+<section id="home" class="section-bg min-h-screen flex items-center justify-center" style="background-image: url('background.png')">
+    <!-- Logo Container -->
+    <div class="logo-container">
+  <img src="Final Logo.png" class="logo" alt="Bridging History Logo">
+</div>
+
+<style>
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  .logo {
+    width: 300vw !important;
+    max-width: 1800px !important;
+    height: auto !important;
+  }
+</style>
+
+</section>
+
+    <!-- About Section with Background -->
+    <section id="about" class="section-bg py-20" style="background-image: url('about.png')">
+      
+      <div class="section-content max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-white mb-4">About Us</h2>
+          <div class="w-24 h-1 bg-amber-400 mx-auto"></div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+            <div class="text-center mb-8">
+              <div class="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-bullseye text-white text-3xl"></i>
+              </div>
+              <h3 class="text-2xl font-semibold text-white mb-4">Our Mission</h3>
+              <p class="text-amber-100 leading-relaxed">
+                Bridging History was created to connect people with cultural heritage through innovative digital experiences. 
+                We combine historical accuracy with engaging interactive elements to make learning fun and accessible.
+              </p>
+            </div>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+            <div class="text-center mb-8">
+              <div class="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-eye text-white text-3xl"></i>
+              </div>
+              <h3 class="text-2xl font-semibold text-white mb-4">Our Vision</h3>
+              <p class="text-amber-100 leading-relaxed">
+                We believe cultural education should be immersive and interactive. Our goal is to break down barriers to 
+                historical understanding through technology and creative storytelling.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Location Section with Background -->
+    <section id="location" class="section-bg py-20" style="background-image: url('map.png')">
+      <div class="section-overlay bg-black/50"></div>
+      <div class="section-content max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-white mb-4">Presidential Car Museum</h2>
+          <div class="w-24 h-1 bg-amber-400 mx-auto"></div>
+        </div>
+        
+        <div class="flex flex-col lg:flex-row gap-8">
+          <!-- Text Content -->
+          <div class="lg:w-1/2 bg-white/90 p-8 rounded-xl shadow-2xl backdrop-blur-sm transform transition hover:-translate-y-2">
+            <h3 class="text-2xl font-semibold mb-6 text-amber-700">Visit the Museum</h3>
+            <p class="text-gray-700 mb-6 leading-relaxed">
+              The Presidential Car Museum at Quezon Memorial Circle showcases the official vehicles used by Philippine presidents. 
+              This unique collection offers a glimpse into the country's political history through these remarkable automobiles.
+            </p>
+            
+            <div class="space-y-6">
+              <div class="bg-amber-50 p-4 rounded-lg">
+                <h4 class="text-lg font-semibold mb-2 text-amber-600 flex items-center">
+                  <i class="fas fa-clock mr-3"></i>Museum Schedule
+                </h4>
+                <ul class="text-gray-700">
+                  <li class="mb-1">Tuesday-Sunday: 9AM - 4PM</li>
+                  <li>Monday: Closed</li>
+                </ul>
+              </div>
+              
+              <div class="bg-amber-50 p-4 rounded-lg">
+                <h4 class="text-lg font-semibold mb-2 text-amber-600 flex items-center">
+                  <i class="fas fa-map-marker-alt mr-3"></i>Address
+                </h4>
+                <p class="text-gray-700">
+                  Quezon Memorial Circle<br>
+                  Elliptical Road, Diliman<br>
+                  Quezon City, Philippines
+                </p>
+              </div>
+              
+              <div class="bg-amber-50 p-4 rounded-lg">
+                <h4 class="text-lg font-semibold mb-2 text-amber-600 flex items-center">
+                  <i class="fas fa-info-circle mr-3"></i>Admission
+                </h4>
+                <p class="text-gray-700">
+                  Free<br>
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Google Maps -->
+          <div class="lg:w-1/2 h-96 rounded-xl shadow-2xl overflow-hidden transform transition hover:-translate-y-2">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3860.654563309158!2d121.0491853153225!3d14.617880980018767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b7afde2a1a3d%3A0x62d7abc8b4c9f4e1!2sPresidential%20Car%20Museum!5e0!3m2!1sen!2sph!4v1690834258477!5m2!1sen!2sph" 
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              class="rounded-xl">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Section with Background -->
+    <section id="game" class="section-bg py-20" style="background-image: url('phcar.png')">
+      <div class="section-content max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-white mb-4">Featured Interactive Experience</h2>
+          <div class="w-24 h-1 bg-amber-400 mx-auto"></div>
+          <p class="text-white max-w-2xl mx-auto mt-4">
+              Discover history like never before with our immersive digital experience
+          </p>
+        </div>
+
+        
+        <div class="w-full max-w-4xl mx-auto">
+          <div class="game-card transform transition hover:scale-102">
+            <div class="aspect-w-16 aspect-h-9">
+              <img src="vr simulation.png" 
+                   alt="Time Traveler's Journey Game" 
+                   class="game-image">
+            </div>
+            <div class="game-overlay">
+              <a href="Car Museum.exe" class="play-button">PLAY NOW</a>
+            </div>
+          </div>
+          
+          <div class="mt-12 bg-white p-8 rounded-xl shadow-2xl transform transition hover:-translate-y-2">
+            <h3 class="text-3xl font-bold mb-6 text-amber-700 text-center">Time Traveler's Journey</h3>
+            <p class="text-gray-700 mb-8 leading-relaxed text-center">
+              Experience an immersive adventure through Philippine presidential history—explore key events, meet iconic figures, answer fun pop-up quizzes, and encounter former presidents face-to-face!
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-amber-50 p-6 rounded-lg">
+                <h4 class="text-xl font-semibold mb-4 text-amber-600 flex items-center">
+                  <i class="fas fa-check-circle text-amber-500 mr-3"></i>
+                  <span>Key Features</span>
+                </h4>
+                <ul class="text-gray-700 space-y-3">
+                  <li class="flex items-start">
+                    <i class="fas fa-arrow-right text-amber-500 mt-1 mr-2"></i>
+                    <span>Explore historical artifacts</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-arrow-right text-amber-500 mt-1 mr-2"></i>
+                    <span>Interactive Museum and Quizes</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="bg-amber-50 p-6 rounded-lg">
+                <h4 class="text-xl font-semibold mb-4 text-amber-600 flex items-center">
+                  <i class="fas fa-star text-amber-500 mr-3"></i>
+                  <span>Additional Benefits</span>
+                </h4>
+                <ul class="text-gray-700 space-y-3">
+                  <li class="flex items-start">
+                    <i class="fas fa-arrow-right text-amber-500 mt-1 mr-2"></i>
+                    <span>Educational content woven into gameplay</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-arrow-right text-amber-500 mt-1 mr-2"></i>
+                    <span>Enjoy our rich and colorful history—your way, your journey, your adventure through time!</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- School Support Video Section -->
+    <section class="bg-[#411900] py-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-amber-100 mb-4">Our Educational Partner</h2>
+          <div class="w-24 h-1 bg-amber-400 mx-auto"></div>
+          <p class="text-amber-100 max-w-2xl mx-auto mt-4">
+            See how our system supports local schools in cultural education
+          </p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto">
+          <div class="video-container">
+            <!-- Replace with your actual video embed code -->
+            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen></iframe>
+          </div>
+          <div class="mt-8 text-center text-amber-100">
+            <p>This video showcases how our system is being used by Antipolo Faith Christian School to enhance their history curriculum and engage students in cultural learning.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer with Background -->
+  <footer class="section-bg pt-20 pb-10" style="background-image: url('footing.png')">
+    <div class="section-overlay bg-gray-800/90"></div>
+    <div class="section-content max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-3 gap-8 mb-12">
+        <section class="">
+  <h3 class="text-2xl font-bold text-amber-100 mb-4">Bridging History</h3>
+  <p class="text-gray-300 mb-4">Let's break limitations.</p>
+
+  <!-- Social Media Links Section -->
+  <div class="mt-4">
+    <h4 class="text-lg font-semibold text-amber-200 mb-2">Follow us:</h4>
+    <div class="flex space-x-4">
+      <a href="https://facebook.com/yourprofile" target="_blank" class="text-gray-300 hover:text-white text-xl transition">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://twitter.com/yourprofile" target="_blank" class="text-gray-300 hover:text-white text-xl transition">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://instagram.com/yourprofile" target="_blank" class="text-gray-300 hover:text-white text-xl transition">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <!-- Add more as needed -->
+    </div>
+  </div>
+</section>
+
+        
+        <div>
+          <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="#home" class="text-gray-300 hover:text-amber-100 transition">Home</a></li>
+            <li><a href="#about" class="text-gray-300 hover:text-amber-100 transition">About</a></li>
+            <li><a href="#location" class="text-gray-300 hover:text-amber-100 transition">Location</a></li>
+            <li><a href="#game" class="text-gray-300 hover:text-amber-100 transition">Game</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold text-white mb-4">Presidential Car Museum Contact</h4>
+          <ul class="space-y-2">
+            <li class="flex items-start text-gray-300">
+              <i class="fas fa-map-marker-alt mt-1 mr-3 text-amber-100"></i>
+              <span>Quezon Memorial Circle, Eliptical Road, Diliman, Quezon City</span>
+            </li>
+            <li class="flex items-start text-gray-300">
+              <i class="fas fa-phone-alt mt-1 mr-3 text-amber-100"></i>
+              <span>(+63) 905-435-3396</span>
+            </li>
+            <li class="flex items-start text-gray-300">
+              <i class="fas fa-envelope mt-1 mr-3 text-amber-100"></i>
+              <span>pcm@nhcp.gov.ph</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-700 pt-6 text-center text-gray-400">
+        <p>&copy; 2025 Bridging History. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top button -->
+  <a href="#home" id="back-to-top" class="fixed bottom-8 right-8 bg-amber-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg transform transition hover:scale-110 hidden">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+    
+    // Scroll header effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('main-header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+      
+      // Back to top button
+      const backToTop = document.getElementById('back-to-top');
+      if (window.scrollY > 300) {
+        backToTop.classList.remove('hidden');
+      } else {
+        backToTop.classList.add('hidden');
+      }
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+        
+        // Close mobile menu if open
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+    
+    // Initialize ScrollReveal
+    ScrollReveal().reveal('.section-content > *', {
+      delay: 200,
+      distance: '50px',
+      origin: 'bottom',
+      interval: 100,
+      easing: 'ease-in-out'
+    });
+  </script>
+</body>
+</html> 
