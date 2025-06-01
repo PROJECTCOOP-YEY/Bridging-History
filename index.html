@@ -204,28 +204,42 @@
   <!-- Main Content -->
   <main>
     <!-- Hero Section with Background -->
-<section id="home" class="section-bg min-h-screen flex items-center justify-center" style="background-image: url('background.png')">
-    <!-- Logo Container -->
-    <div class="logo-container">
-  <img src="Final Logo.png" class="logo" alt="Bridging History Logo">
-</div>
-
-<style>
-  .logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-  }
-
-  .logo {
-    width: 300vw !important;
-    max-width: 1800px !important;
-    height: auto !important;
-  }
-</style>
-
-</section>
+    <section id="home" class="section-bg min-h-screen flex items-center justify-center" style="background-image: url('background.png'); background-size: cover; background-position: center;">
+    
+      <!-- Logo Container -->
+      <div class="logo-container">
+        <img src="Final Logo.png" class="logo" alt="Bridging History Logo">
+      </div>
+      
+      <style>
+        .logo-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 2rem;
+          width: 100%;
+        }
+  
+        .logo {
+          width: 200%;
+          max-width: 2000px; /* Adjust based on how big you want the logo to be at most */
+          height: auto;
+        }
+  
+        @media (max-width: 768px) {
+          .logo {
+            max-width: 80%;
+          }
+        }
+  
+        @media (max-width: 480px) {
+          .logo {
+            max-width: 70%;
+          }
+        }
+      </style>
+    </section>
+  
 
     <!-- About Section with Background -->
     <section id="about" class="section-bg py-20" style="background-image: url('about.png')">
